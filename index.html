@@ -3,397 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Mom ❤️</title>
+    <title>HPBD Trẫm 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f7f3e9; /* Màu kem chủ đạo */
-            --accent-color: #e67e22;
-            --text-color: #5d4037;
-            --ios-gray: #8e8e93;
-            --card-bg: #ffffff;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --cream: #FFFDD0;
+            --pink-soft: #FFB7C5;
+            --pink-dark: #FF8DA1;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
+            margin: 0; padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--cream);
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh;
         }
 
         /* --- MÀN HÌNH MẬT KHẨU --- */
-        #password-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        #passcode-screen {
+            position: fixed; inset: 0;
+            background: var(--cream);
             z-index: 1000;
-            transition: opacity 0.8s ease, visibility 0.8s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        .pass-container {
-            text-align: center;
+        .cover-img {
+            width: 120px; height: 120px;
+            border-radius: 50%; object-fit: cover;
+            border: 4px solid var(--pink-soft);
+            margin-bottom: 10px;
+        }
+
+        .passcode-display {
+            font-size: 30px; letter-spacing: 15px;
+            margin-bottom: 20px; color: var(--pink-dark);
+            height: 40px; font-weight: bold;
+        }
+
+        .keypad {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+        }
+
+        .key {
+            width: 65px; height: 65px;
+            border-radius: 50%; border: none;
+            background: #fff; font-size: 22px;
+            font-weight: bold; color: var(--pink-dark);
+            box-shadow: 0 4px 0 var(--pink-soft);
+            cursor: pointer;
+        }
+
+        .key:active { transform: translateY(4px); box-shadow: none; }
+        .key.del { background: var(--pink-soft); color: white; font-size: 14px; }
+
+        /* --- NỘI DUNG CHÍNH --- */
+        #main-content { 
+            visibility: hidden; opacity: 0; transition: 1s; 
+            text-align: center; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .hpbd-text { font-size: 26px; color: var(--pink-dark); margin-top: 50px; font-weight: bold; padding: 0 10px; }
+
+        .age-display {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--pink-dark);
+            margin: 20px 0;
+            background: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 3px solid var(--pink-soft);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .decoration-img-main {
             width: 80%;
             max-width: 300px;
-        }
-
-        .pass-container h2 {
-            font-weight: 400;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-        }
-
-        #password-input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid #ccc;
-            text-align: center;
-            font-size: 1.1rem;
-            letter-spacing: 5px;
-            outline: none;
-            background: rgba(255, 255, 255, 0.8);
-            margin-bottom: 15px;
-        }
-
-        #pass-btn {
-            background: var(--text-color);
-            color: white;
-            border: none;
-            padding: 10px 25px;
             border-radius: 20px;
-            cursor: pointer;
-            font-size: 1rem;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
 
-        #error-msg {
-            color: #d63031;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            display: none;
+        /* --- HÒM THƯ (SỬA LỖI ĐƠ) --- */
+        #letter-modal { 
+            display: none; position: fixed; inset: 0; 
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); 
+            z-index: 2000; justify-content: center; align-items: center; 
         }
 
-        /* --- GIAO DIỆN CHÍNH --- */
-        #main-content {
-            width: 100%;
-            max-width: 500px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 1s ease;
+        .letter-content { 
+            background: #fff; padding: 20px; 
+            border-radius: 25px; border: 8px solid var(--pink-soft); 
+            width: 85%; max-width: 400px; 
+            max-height: 85vh; /* Giới hạn chiều cao */
+            overflow-y: auto; /* QUAN TRỌNG: Cho phép lướt xem ảnh */
             position: relative;
-            background: var(--bg-color);
-            min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        /* Status Bar giả lập */
-        .status-bar {
-            height: 44px;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-            background: var(--bg-color);
-            z-index: 99;
-        }
+        .letter-img { width: 100%; border-radius: 15px; margin: 15px 0; display: block; }
 
-        .status-icons {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
-
-        /* Header kiểu iOS */
-        .ios-header {
-            text-align: center;
-            padding: 15px;
-            position: sticky;
-            top: 44px;
-            background: var(--bg-color);
-            z-index: 98;
-        }
-
-        .ios-header h1 {
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        /* Banner Mèo */
-        .banner {
-            padding: 15px;
-            text-align: center;
-        }
-
-        .banner img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 25px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-            transition: transform 0.5s;
-        }
-        .banner img:hover {
-            transform: scale(1.02);
-        }
-
-        /* Content Area */
-        .content-card {
-            margin: 15px;
-            background: var(--card-bg);
-            border-radius: 25px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        }
-
-        .bday-title {
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-            color: #d35400;
-        }
-
-        .bday-date {
-            font-size: 0.9rem;
-            color: var(--ios-gray);
-            margin-bottom: 10px;
-        }
-
-        .age-tag {
-            display: inline-block;
-            background: #fff3e0;
-            color: #e67e22;
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .wish {
-            font-style: italic;
-            line-height: 1.6;
-            font-size: 1.05rem;
-        }
-
-        /* Gallery */
-        .gallery-container {
-            padding: 15px;
-        }
-
-        .gallery-title {
-            margin-left: 10px;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            color: var(--ios-gray);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .grid-item {
-            aspect-ratio: 1/1;
-            overflow: hidden;
-            border-radius: 18px;
-            background: #eee;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
-
-        .grid-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .grid-item:hover img {
-            transform: scale(1.1);
-        }
-
-        /* Music Button */
-        .music-btn-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .btn-fake {
-            background: #fff;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            color: var(--text-color);
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--ios-gray);
-            font-size: 0.85rem;
-        }
-
-        /* Hiệu ứng trái tim */
-        .heart {
-            position: fixed;
-            color: #ff7675;
-            font-size: 20px;
-            user-select: none;
-            pointer-events: none;
-            z-index: 10;
-            animation: floatUp 4s linear infinite;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
-        }
-
-        /* Rung khi sai pass */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        .shake { animation: shake 0.3s ease-in-out; }
-
+        /* Các hiệu ứng khác */
+        .welcome-msg { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 50px; color: var(--pink-dark); z-index: 999; pointer-events: none; }
+        .gift-box { position: fixed; bottom: 30px; right: 30px; cursor: pointer; z-index: 10; text-align: center; }
+        .gift-icon { font-size: 55px; animation: shake 0.6s infinite; }
+        @keyframes shake { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+        
+        .audio-ctrl { position: fixed; top: 20px; right: 20px; background: white; border-radius: 30px; padding: 5px 15px; cursor: pointer; border: 2px solid var(--pink-soft); z-index: 100; font-weight: bold; }
+        .firework { position: absolute; width: 6px; height: 6px; border-radius: 50%; animation: explode 1s ease-out forwards; z-index: 5; }
+        @keyframes explode { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(30); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <div id="password-screen">
-        <div class="pass-container" id="pass-box">
-            <h2>Nhập mật khẩu để mở ❤️</h2>
-            <input type="password" id="password-input" placeholder="••••••••">
-            <br>
-            <button id="pass-btn" onclick="checkPassword()">Mở quà</button>
-            <p id="error-msg">Sai mật khẩu rồi 😢</p>
+    <div id="passcode-screen">
+        <img src="mt/anhbia.png" alt="Bìa" class="cover-img">
+        <div id="status-msg" style="height:20px; font-size:14px; margin-bottom:5px; font-weight: bold;"></div>
+        <div class="passcode-display" id="display">****</div>
+        <div class="keypad">
+            <button class="key" onclick="press(1)">1</button>
+            <button class="key" onclick="press(2)">2</button>
+            <button class="key" onclick="press(3)">3</button>
+            <button class="key" onclick="press(4)">4</button>
+            <button class="key" onclick="press(5)">5</button>
+            <button class="key" onclick="press(6)">6</button>
+            <button class="key" onclick="press(7)">7</button>
+            <button class="key" onclick="press(8)">8</button>
+            <button class="key" onclick="press(9)">9</button>
+            <div style="width:65px"></div>
+            <button class="key" onclick="press(0)">0</button>
+            <button class="key del" onclick="clearPass()">XÓA</button>
         </div>
     </div>
 
     <div id="main-content">
-        <div class="status-bar">
-            <div id="time">10:45</div>
-            <div class="status-icons">
-                <span>📶</span>
-                <span>📶</span>
-                <span>99% 🔋</span>
-            </div>
-        </div>
+        <div class="audio-ctrl" onclick="toggleAudio()">🎵 Nhạc</div>
+        <div id="welcome" class="welcome-msg" style="display:none;">Chào Mừng</div>
+        
+        <h1 class="hpbd-text">Chúc mừng sinh nhật Trẫm nhaaaaa ><</h1>
 
-        <div class="ios-header">
-            <h1>Kỷ Niệm</h1>
-        </div>
+        <div class="age-display" id="age-text">...</div>
 
-        <div class="banner">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJ19xAba3dVIuD-KPUsnwYrhvPxc4hXEFmOQ&s" alt="Mom's Cat Banner">
-        </div>
+        <img src="mt/anhnen.png" alt="Trang trí" class="decoration-img-main">
+        
+        <div style="font-size: 30px;">❤️ ✨ 💖</div>
 
-        <div class="content-card">
-            <h2 class="bday-title">Happy Birthday Mom ❤️</h2>
-            <p class="bday-date">20/04/2007 - 20/04/2026</p>
-            <div class="age-tag" id="age-display">19 tuổi</div>
-            <p class="wish">
-                "chúc mom sinh nhật vui vẻ tràn ngập niềm vui và hạnh phúc càng ngày càng xinh đẹp và đáng yêu hơn nữa kím đc nhìu tìn và mãi mãi hp nhaaaaaaaaaa  "
-            </p>
+        <div class="gift-box" onclick="openLetter()">
+            <div class="gift-icon">🎁</div>
+            <p style="font-weight: bold; color: var(--pink-dark); margin: 0; font-size: 14px;">Nhấn xem thư</p>
         </div>
-
-        <div class="music-btn-container">
-            <button class="btn-fake">nhấn vào cho đẹp gái</button>
-        </div>
-
-        <div class="gallery-title">Khoảnh khắc đáng yêu</div>
-        <div class="gallery-container">
-            <div class="grid">
-                <div class="grid-item"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHlqh-_34SHCu3HJqSLXA5agtYoMyvD2-eSQ&s"></div>
-                <div class="grid-item"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSVY03G0RsUztuiThjVWdSCbJsVzgmt8_RrQ&s"></div>
-                <div class="grid-item"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeJR-GWAQW2kDMXB94g3rRWS1yhOshDxZT0A&s"></div>
-                <div class="grid-item"><img src="https://www.anhnghethuatdulich.com/wp-content/uploads/2025/09/chu-meo-om-hoa-hong-do-tao-nen-khoanh-khac-che-lang-man-ma-van-cuc-hai.jpg"></div>
-                <div class="grid-item"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX1m2K964WuvXxgFswKllZOzZG5-hUalA6Aw&s"></div>
-                <div class="grid-item"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbC9EiZ6YlQaCF3upzpnEma5znbFC202beXw&s"></div>
-            </div>
-        </div>
-
-        <footer>
-            Happy Birthday 2026
-        </footer>
     </div>
 
+    <div id="letter-modal" onclick="this.style.display='none'">
+        <div class="letter-content" onclick="event.stopPropagation()">
+            <h2 style="color: var(--pink-dark); text-align: center; margin: 0;">Gửi Trẫm... 🎀</h2>
+            
+            <img src="mt/image1.png" class="letter-img">
+            
+            <p style="font-size: 16px; color: #444; line-height: 1.6; text-align: center; padding: 10px;">
+                Chúc Trẫm sinh nhật vui vẻ tràn ngập hạnh phúc niềm vui, làm được nhiều thứ mình thích. <br><br>
+                Tuổi mới xinh đẹp rực rỡ, không nóng giận không suy nghĩ lung tung trong cuộc sống không vướng những điều sa ngã nhaaaa >< <br><br>
+                <b>Không được nhịn ăn đó</b> và luôn luôn gặp được may mắn, đạt được nhiều ước mơ và nguyện vọng của chính mình!
+            </p>
+            
+            <img src="mt/image2.png" class="letter-img">
+            
+            <button onclick="document.getElementById('letter-modal').style.display='none'" 
+                    style="background: var(--pink-soft); border:none; padding:15px; border-radius:15px; color:white; width:100%; cursor:pointer; font-weight:bold; font-size: 16px; margin-top: 10px;">
+                Đóng Thư ❤️
+            </button>
+        </div>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="mt/amthanh.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        // Cập nhật giờ thực tế
-        function updateTime() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('time').innerText = `${hours}:${minutes}`;
+        let input = "";
+        const correctPass = "1234"; 
+
+        function press(num) {
+            if (input.length < 4) {
+                input += num;
+                updateDisplay();
+                if (input.length === 4) {
+                    setTimeout(checkPass, 200); 
+                }
+            }
         }
-        setInterval(updateTime, 1000);
-        updateTime();
 
-        // Kiểm tra mật khẩu
-        function checkPassword() {
-            const input = document.getElementById('password-input').value;
-            const passBox = document.getElementById('pass-box');
-            const errorMsg = document.getElementById('error-msg');
-            const correctPass = "2007";
+        function clearPass() {
+            input = "";
+            updateDisplay();
+            document.getElementById('status-msg').innerHTML = "";
+        }
 
+        function updateDisplay() {
+            document.getElementById('display').innerText = "*".repeat(input.length) || "ᵒᵒᵒᵒ";
+        }
+
+        function checkPass() {
             if (input === correctPass) {
-                document.getElementById('password-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('password-screen').style.visibility = 'hidden';
-                    document.getElementById('main-content').style.visibility = 'visible';
-                    document.getElementById('main-content').style.opacity = '1';
-                    startHearts();
-                }, 800);
+                document.getElementById('passcode-screen').style.display = 'none';
+                const main = document.getElementById('main-content');
+                main.style.visibility = 'visible';
+                main.style.opacity = '1';
+                document.getElementById('bg-music').play();
+                
+                launchFireworks();
+                const welcome = document.getElementById('welcome');
+                welcome.style.display = 'block';
+                setTimeout(() => { welcome.style.transition = "opacity 5s"; welcome.style.opacity = "0"; }, 100);
+                
+                updateAge();
             } else {
-                errorMsg.style.display = 'block';
-                passBox.classList.add('shake');
-                setTimeout(() => passBox.classList.remove('shake'), 300);
+                const status = document.getElementById('status-msg');
+                status.innerHTML = "😡 Bạn không phải chủ nhân của tôi";
+                status.style.color = "red";
+                input = "";
+                updateDisplay();
             }
         }
 
-        // Enter để nhập pass
-        document.getElementById('password-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                checkPassword();
+        function updateAge() {
+            const birthDate = new Date("2011-05-01");
+            const now = new Date();
+            let age = now.getFullYear() - birthDate.getFullYear();
+            const monthDiff = now.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) {
+                age--;
             }
-        });
+            document.getElementById('age-text').innerHTML = ` 15 tuổi`;
+        }
 
-        // Hiệu ứng trái tim bay
-        function startHearts() {
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.innerHTML = '💖';
-                heart.classList.add('heart');
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-                heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
-                document.body.appendChild(heart);
-
+        function launchFireworks() {
+            for (let i = 0; i < 25; i++) {
                 setTimeout(() => {
-                    heart.remove();
-                }, 4000);
-            }, 600);
+                    let fw = document.createElement('div');
+                    fw.className = 'firework';
+                    fw.style.left = Math.random() * 100 + "vw";
+                    fw.style.top = Math.random() * 100 + "vh";
+                    fw.style.background = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                    document.body.appendChild(fw);
+                    setTimeout(() => fw.remove(), 1000);
+                }, i * 100);
+            }
+        }
+
+        function openLetter() { document.getElementById('letter-modal').style.display = 'flex'; }
+        function toggleAudio() {
+            let music = document.getElementById('bg-music');
+            music.paused ? music.play() : music.pause();
         }
     </script>
 </body>
