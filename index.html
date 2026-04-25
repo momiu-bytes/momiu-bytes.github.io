@@ -141,22 +141,68 @@
     </div>
 
     <div id="main-content">
-        <div class="audio-ctrl" onclick="toggleAudio()">🎵 Nhạc</div>
-        <div id="welcome" class="welcome-msg" style="display:none;">Chào Mừng</div>
+    <div class="audio-ctrl" onclick="toggleAudio()">🎵 Nhạc</div>
+    
+    <h1 class="hpbd-text">Chúc mừng sinh nhật Trẫm nhaaaaa ><</h1>
+
+    <div class="age-display" id="age-text">15 tuổi><</div>
+
+    <img src="mt/anhnen.png" alt="Trang trí" class="decoration-img-main">
+
+    <div id="bubbles-container" style="position:fixed; inset:0; pointer-events:none; z-index:99;"></div>
+
+    <div class="gift-box" onclick="openLetter()">
+    <div class="gift-icon">🎁</div>
+    <p style="font-weight: bold; color: var(--pink-dark); margin: 0; font-size: 14px;">Nhấn xem thư</p>
+</div>
+
+<div id="letter-modal" onclick="this.style.display='none'">
+    <div class="letter-content" onclick="event.stopPropagation()">
+        <h2 style="color: var(--pink-dark); text-align: center; margin: 0;">Gửi Trẫm... 🎀</h2>
         
-        <h1 class="hpbd-text">Chúc mừng sinh nhật Trẫm nhaaaaa ><</h1>
+        <img src="mt/image1.png" class="letter-img">
 
-        <div class="age-display" id="age-text">...</div>
-
-        <img src="mt/anhnen.png" alt="Trang trí" class="decoration-img-main">
+        <p style="font-size: 13px; color: var(--pink-dark); font-weight: bold; margin: 5px 0; animation: bounce 1s infinite;">
+            Kéo xuống để xem thêm ⬇️
+        </p>
         
-        <div style="font-size: 30px;">❤️ ✨ 💖</div>
-
-        <div class="gift-box" onclick="openLetter()">
-            <div class="gift-icon">🎁</div>
-            <p style="font-weight: bold; color: var(--pink-dark); margin: 0; font-size: 14px;">Nhấn xem thư</p>
-        </div>
+        <p style="font-size: 16px; color: #444; line-height: 1.6; text-align: center; padding: 10px;">
+            Chúc Trẫm sinh nhật vui vẻ tràn ngập hạnh phúc niềm vui, làm được nhiều thứ mình thích. <br><br>
+            Tuổi mới xinh đẹp rực rỡ, không nóng giận không suy nghĩ lung tung trong cuộc sống không vướng những điều sa ngã nhaaaa >< <br><br>
+            <b>Không được nhịn ăn đó</b> và luôn luôn gặp được may mắn, đạt được nhiều ước mơ và nguyện vọng của chính mình!
+        </p>
+        
+        <img src="mt/image2.png" class="letter-img">
+        
+        <button onclick="document.getElementById('letter-modal').style.display='none'" 
+                style="background: var(--pink-soft); border:none; padding:15px; border-radius:15px; color:white; width:100%; cursor:pointer; font-weight:bold; font-size: 16px; margin-top: 10px;">
+            Đóng Thư ❤️
+        </button>
     </div>
+</div>
+
+<style>
+/* Thêm hiệu ứng nhún nhảy cho chữ "Kéo xuống" */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+    }
+</style>
+
+<script>
+    // Hàm tạo icon nổi, hãy gọi nó trong hàm checkPass() khi nhập đúng mật khẩu
+    function startFloatingIcons() {
+        setInterval(() => {
+            const icons = ['❤️', '✨', '💖', '🌸'];
+            const b = document.createElement('div');
+            b.className = 'bubble';
+            b.innerText = icons[Math.floor(Math.random() * icons.length)];
+            b.style.left = Math.random() * 100 + "vw";
+            document.getElementById('bubbles-container').appendChild(b);
+            setTimeout(() => b.remove(), 4000);
+        }, 500);
+    }
+</script>
 
     <div id="letter-modal" onclick="this.style.display='none'">
         <div class="letter-content" onclick="event.stopPropagation()">
@@ -204,7 +250,7 @@
         }
 
         function updateDisplay() {
-            document.getElementById('display').innerText = "*".repeat(input.length) || "ᵒᵒᵒᵒ";
+            document.getElementById('display').innerText = "ᵒ".repeat(input.length) || "ᵒᵒᵒᵒ";
         }
 
         function checkPass() {
@@ -238,7 +284,8 @@
             if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) {
                 age--;
             }
-            document.getElementById('age-text').innerHTML = ` 15 tuổi`;
+            document.getElementById('age-text').innerHTML = ` 1-5-2011 1-5-
+15 tuổi`;
         }
 
         function launchFireworks() {
