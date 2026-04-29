@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOI CÁI GÌ ???</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.1s;
+        }
+
+        h1 {
+            font-size: 15vw; /* Font chữ cực to theo chiều rộng màn hình */
+            font-weight: bold;
+            text-transform: uppercase;
+            user-select: none;
+        }
+
+        /* Lớp nền trắng chữ đen */
+        .mode-1 {
+            background-color: white;
+            color: black;
+        }
+
+        /* Lớp nền đen chữ trắng */
+        .mode-2 {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body class="mode-1">
+
+    <h1 id="text">SOI CÁI LỒN?</h1>
+
+    <audio id="bg-audio" loop>
+        <source src="mt/amthanh.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ audio.
+    </audio>
+
+    <script>
+        const body = document.body;
+        const audio = document.getElementById('bg-audio');
+
+        // Hàm chuyển đổi màu sắc mỗi giây
+        setInterval(() => {
+            if (body.classList.contains('mode-1')) {
+                body.classList.remove('mode-1');
+                body.classList.add('mode-2');
+            } else {
+                body.classList.remove('mode-2');
+                body.classList.add('mode-1');
+            }
+        }, 10); // 10ms = 1 giây
+
+        // Vì chính sách trình duyệt chặn tự động phát âm thanh (Autoplay)
+        // Nên cần một lần click bất kỳ vào màn hình để kích hoạt nhạc
+        window.onclick = function() {
+            audio.play();
+        };
+    </script>
+</body>
+</html>
