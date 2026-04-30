@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>SOI CÁI GÌ ???</title>
+    <style>
+        /* Level 1: Chớp Đen Trắng 10ms */
+        @keyframes strobe-bw {
+            0% { background-color: #000; color: #fff; }
+            100% { background-color: #fff; color: #000; }
+        }
+
+        /* Level 2: Bom Choáng Đỏ Trắng 10ms (Sáng chói mắt) */
+        @keyframes flashbang {
+            0% { background-color: #ff0000; color: #ffffff; }
+            50% { background-color: #ffffff; color: #ff0000; }
+            100% { background-color: #ff0000; color: #ffffff; }
+        }
+
+        body, html {
+            height: 100%; margin: 0; overflow: hidden;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            font-family: 'Arial Black', sans-serif;
+            /* Vào trang là chớp đen trắng ngay lập tức */
+            animation: strobe-bw 0.01s infinite;
+        }
+
+        .nuke-active {
+            animation: flashbang 0.01s infinite !important;
+        }
+
+        h1 {
+            font-size: 15vw; text-align: center;
+            line-height: 0.8; user-select: none;
+            margin-bottom: 100px;
+        }
+
+        /* Nút thoát nằm sát mép dưới (Vị trí Home) */
+        #btnThoat {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 20px 80px;
+            font-size: 40px;
+            font-weight: 900;
+            background-color: #ff0000;
+            color: #fff;
+            border: 10px solid #fff;
+            cursor: pointer;
+            box-shadow: 0 0 80px #fff;
+            z-index: 100;
+            text-transform: uppercase;
+        }
+
+        /* Lớp phủ tàng hình để bẫy nhạc */
+        #invisible-trap {
+            position: fixed; inset: 0;
+            z-index: 999; background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="invisible-trap"></div>
+
+    <h1 id="text">SOI CÁI GÌ?</h1>
+    <button id="btnThoat">THOÁT</button>
+
+    <audio id="audio" loop>
+        <source src="mt/amthanh.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audio = document.getElementById('audio');
+        const trap = document.getElementById('invisible-trap');
+        const btn = document.getElementById('btnThoat');
+        const text = document.getElementById('text');
+
+        // Hàm kích hoạt nhạc
+        function playMusic() {
+            audio.play();
+            trap.style.display = 'none'; // Gỡ bẫy sau khi nhạc đã chạy
+        }
+
+        // Chạm vào màn hình là nhạc nổ
+        trap.addEventListener('click', playMusic);
+        trap.addEventListener('touchstart', playMusic);
+
+        // Khi bấm THOÁT
+        btn.onclick = function() {
+            playMusic(); // Đảm bảo nhạc nổ nếu họ bấm thẳng vào nút thoát
+            
+            document.body.classList.add('nuke-active');
+            text.innerText = "THOÁT LÀM GÌ?";
+            btn.innerText = "MÙ MẮT CHƯA?";
+            audio.volume = 1.0;
+
+            // Nút nhảy loạn xạ
+            setInterval(() => {
+                const x = Math.random() * (window.innerWidth - 200);
+                const y = Math.random() * (window.innerHeight - 100);
+                btn.style.position = 'absolute';
+                btn.style.left = x + 'px';
+                btn.style.top = y + 'px';
+                btn.style.bottom = 'auto';
+            }, 70);
+        };
+
+        // Chặn soi code
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = e => { if(e.keyCode == 123) return false; };
+    </script>
+</body>
+</html>
